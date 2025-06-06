@@ -289,38 +289,46 @@
           </section> */ }
 
 
-          <section
-            className="h-screen flex flex-col justify-center items-center relative"
-            style={{
-              backgroundImage: "url('https://media.istockphoto.com/id/1806011581/photo/overjoyed-happy-young-people-dancing-jumping-and-singing-during-concert-of-favorite-group.jpg?s=612x612&w=0&k=20&c=cMFdhX403-yKneupEN-VWSfFdy6UWf1H0zqo6QBChP4=')",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundAttachment: "fixed", // optional, for fixed background effect
-            }}
-          >
-            <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-            <div className="word-animator" id="animator"></div>
+        <section className="h-screen flex flex-col justify-center items-center relative overflow-hidden">
 
-            <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-12">
-              <div className=" text-white px-6 py-6 w-full max-w-2xl mb-12">
-                <h2 className="text-4xl font-bold mb-6 text-center p-2">TICKETS</h2>
-                <div className="flex justify-center space-x-4">
-                  <Button
-                    onClick={openReadMore}
-                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8"
-                  >
-                    Read More
-                  </Button>
-                  <Link to="/vip-tables">
-                    <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8">
-                      VIP Tables
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
+  {/* Video Background */}
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="absolute inset-0 w-full h-full object-cover"
+  >
+    <source src="/vid1.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  {/* Overlay (optional — darkens video so text is readable) */}
+  <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+  {/* Word Animator */}
+  <div className="relative z-10 word-animator" id="animator"></div>
+
+  {/* Tickets Section */}
+  <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-12 z-10">
+    <div className="text-white px-6 py-6 w-full max-w-2xl mb-12">
+      <h2 className="text-4xl font-bold mb-6 text-center p-2">TICKETS</h2>
+      <div className="flex justify-center space-x-4">
+        <Button
+          onClick={openReadMore}
+          className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8"
+        >
+          Read More
+        </Button>
+        <Link to="/vip-tables">
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8">
+            VIP Tables
+          </Button>
+        </Link>
+      </div>
+    </div>
+  </div>
+</section>
           
         </div>
 
