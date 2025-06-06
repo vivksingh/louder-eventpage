@@ -255,11 +255,20 @@
     return (
       <div className="pt-12">
         <div>
+
           <section className="h-screen flex flex-col justify-center items-center relative">
 
             <div class="word-animator" id="animator"></div>
-
-            <div className="absolute bottom-0 left-0 right-0 bg-white text-black py-12 px-4">
+            
+            <div className=" bottom-0 left-0 right-0 text-black py-2 px-4">
+              <div className="flex justify-center items-center px-4">
+              <p className="text-lg text-center max-w-9xl text-black">
+                Welcome to the future of clubbing. Officially the World's #1 Club, Tamasha is a 360 nightlife experience featuring the world's best DJs, incredible production, plus so much more.
+                As a multi-room venue, every element has been precision-engineered to deliver a new excellence in clubbing.
+                Our pioneering music program encompasses three state-of-the-art rooms, with cutting-edge artists, surprise special guests and impromptu B2Bs.
+              </p>
+            </div>
+            <br /> <br />
               <div className="container mx-auto">
                 <h2 className="text-4xl font-bold mb-6 text-center">TICKETS</h2>
                 <div className="flex justify-center space-x-4">
@@ -278,17 +287,19 @@
             </div>
 
           </section>
+          
         </div>
 
         {/* <section className="py-4 overflow-hidden border-y border-black">
           <div className="whitespace-nowrap text-2xl font-bold">{scrollText.repeat(3)}</div>
         </section> */}
 
-        <section ref={ticketsRef} className="py-16 bg-black text-white">
+        {/* UPCOMING events */}
+        {/* <section ref={ticketsRef} className="py-12 text-black">
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl font-bold mb-12 text-center">UPCOMING EVENTS</h2>
+            <h2 className="text-4xl font-bold mb-12 ">UPCOMING EVENTS</h2>
 
-            <div className="relative">
+            <div className="relative bg-black border border-white text-white p-8 rounded-lg">
               <div className="flex justify-between items-center mb-8">
                 <h3 className="text-2xl font-bold">{events[currentEventIndex].date}</h3>
                 <div className="flex space-x-2">
@@ -316,7 +327,7 @@
                   <img
                     src={events[currentEventIndex].image || "/placeholder.svg"}
                     alt={events[currentEventIndex].title}
-                    className="w-full h-auto aspect-[3/4] object-cover"
+                    className="max-w-sm h-auto aspect-[3/4] object-cover flex justify-center items-center mx-auto mb-6 rounded-lg shadow-lg"
                   />
                 </div>
 
@@ -329,6 +340,7 @@
                     </p>
                   </div>
 
+                  
                   <div className="space-y-4">
                     <Link to={events[currentEventIndex].link}>
                       <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">BUY TICKETS</Button>
@@ -348,15 +360,18 @@
                     </Link>
                   </div>
                 </div>
+
               </div>
             </div>
-          </div>
-        </section>
 
-        <section className="py-16">
+          </div>
+        </section> */}
+
+
+        <section className="py-12">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-12">
-              <h2 className="text-4xl font-bold">RESIDENTS</h2>
+              <h2 className="text-4xl font-bold">EVENTS</h2>
               <div className="flex items-center space-x-4">
                 <Link to="/residents">
                   <Button variant="outline" className="border-black hover:bg-black hover:text-white">
@@ -387,11 +402,11 @@
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {residents.slice(currentResidentIndex * 4, (currentResidentIndex + 1) * 4).map((resident) => (
                 <div key={resident.id} className="text-center">
-                  <div className="mb-4 aspect-square relative overflow-hidden">
+                  <div className="mb-4 aspect-square relative overflow-hidden rounded-lg shadow-lg">
                     <img
                       src={resident.image || "/placeholder.svg"}
                       alt={resident.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover "
                     />
                   </div>
                   <h3 className="text-xl font-bold">{resident.name}</h3>
@@ -402,10 +417,11 @@
           </div>
         </section>
 
-        <section className="py-16 bg-black text-white">
+        {/* <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-12">
               <h2 className="text-4xl font-bold">SPECIAL EVENTS</h2>
+            
               <div className="flex items-center space-x-4">
                 <Link to="/special-events">
                   <Button className="border-white text-white hover:bg-white hover:text-black">
@@ -433,10 +449,10 @@
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className=" grid grid-cols-1 md:grid-cols-2 gap-8">
               {specialEvents.slice(currentSpecialEventIndex * 2, (currentSpecialEventIndex + 1) * 2).map((event) => (
                 <Link to={event.link} key={event.id} className="group">
-                  <div className="relative aspect-video overflow-hidden mb-4">
+                  <div className="p-8 bg-black rounded-lg relative aspect-video overflow-hidden mb-4">
                     <img
                       src={event.image || "/placeholder.svg"}
                       alt={event.title}
@@ -453,9 +469,9 @@
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
 
-        <section className="py-16">
+        {/* <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-12">
               <h2 className="text-4xl font-bold">MUSIC</h2>
@@ -505,7 +521,35 @@
               ))}
             </div>
           </div>
-        </section>
+        </section> */}
+
+
+        <section className="w-full min-h-screen flex flex-col justify-center items-center px-6 ">
+      <div className="max-w-3xl">
+        {/* Main Title */}
+        <h1 className="text-3xl font-bold mb-8  text-center">TAMASHA</h1>
+
+        {/* Subheading */}
+        <h2 className="text-2xl font-bold mb-6  text-center">Welcome to the future of nightlife.</h2>
+
+        {/* Paragraphs */}
+        <p className="text-lg text-gray-700 mb-4">
+          Tamasha is redefining nightlife experiences across the globe — an immersive world of music, dance, and culture where every night is unforgettable.
+        </p>
+
+        <p className="text-lg text-gray-700 mb-4">
+          Our multi-room venues are designed to deliver the ultimate sensory experience, with cutting-edge sound, spectacular visuals, and top-tier DJs bringing the energy to life.
+        </p>
+
+        <p className="text-lg text-gray-700 mb-4">
+          At Tamasha, every event is curated to perfection — from exclusive VIP experiences to vibrant dance floors that keep you moving all night long.
+        </p>
+
+        <p className="text-lg text-gray-700">
+          Discover your new favorite party, indulge in luxury, and lose yourself in the rhythm. Welcome to Tamasha — where the night comes alive.
+        </p>
+      </div>
+    </section>
       </div>
     )
   }

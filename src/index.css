@@ -87,6 +87,7 @@
       font-weight: bold;
       gap: 0.2em;
       text-transform: uppercase;
+      height: 30%;
     }
 
 .letter {
@@ -99,3 +100,8 @@
       opacity: 1;
       transform: scale(1);
     }
+
+body {
+  @apply bg-gradient-to-br from-green-100 via-blue-100 via-purple-100 via-pink-100 to-white transition-all duration-1000 ease-in-out;
+}
+

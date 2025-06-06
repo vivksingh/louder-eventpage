@@ -4,14 +4,14 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../components/ui/button"; // adjust path if needed
 
 const offers = [
-  { id: 1, title: "50% Off Drinks", description: "Valid this weekend only!", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
-  { id: 2, title: "Free Entry Before 10PM", description: "Join us early!", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
-  { id: 3, title: "VIP Package Special", description: "Book now & save big!", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
-  { id: 4, title: "2-for-1 Cocktails", description: "Every Friday night.", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
-  { id: 5, title: "Group Discounts", description: "Bring your friends!", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
-  { id: 6, title: "Ladies Night", description: "Free entry for ladies till 11 PM!", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
-  { id: 7, title: "Birthday Bash", description: "Celebrate with a VIP booth!", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
-  { id: 8, title: "Happy Hour", description: "Discounted cocktails from 8-10 PM!", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg" },
+  { id: 1, title: "50% Off Drinks", description: "Valid this weekend only!", image: "/images/offer1.jpg" },
+  { id: 2, title: "Free Entry Before 10PM", description: "Join us early!", image: "/images/offer2.jpg" },
+  { id: 3, title: "VIP Package Special", description: "Book now & save big!", image: "/images/offer3.jpg" },
+  { id: 4, title: "2-for-1 Cocktails", description: "Every Friday night.", image: "/images/offer4.jpg" },
+  { id: 5, title: "Group Discounts", description: "Bring your friends!", image: "/images/offer5.jpg" },
+  { id: 6, title: "Ladies Night", description: "Free entry for ladies till 11 PM!", image: "/images/offer6.jpg" },
+  { id: 7, title: "Birthday Bash", description: "Celebrate with a VIP booth!", image: "/images/offer7.jpg" },
+  { id: 8, title: "Happy Hour", description: "Discounted cocktails from 8-10 PM!", image: "/images/offer8.jpg" },
 ];
 
 export default function Offers() {
@@ -34,23 +34,17 @@ export default function Offers() {
   );
 
   return (
-    <section className="mt-16 pt-3 px-6 bg-white">
+    <section className="py-16 px-6 bg-white">
       <div className="container mx-auto">
-        {/* Header + Subtext + Buttons */}
+        {/* Header + Buttons */}
         <div className="flex justify-between items-center mb-12">
-          <div>
-            <h2 className="text-4xl font-bold mb-2">Exclusive Club Offers</h2>
-            <p className="text-lg text-gray-600 max-w-xl">
-              Discover the hottest deals and exclusive offers to elevate your night at Tamasha Club. From VIP experiences to irresistible happy hours — there’s something for everyone!
-            </p>
-          </div>
+          <h2 className="text-4xl font-bold">Exclusive Club Offers</h2>
           <div className="flex items-center space-x-4">
-            {/* Optional SHOW ALL button */}
-            {/* <Link to="/offers">
+            <Link to="/offers">
               <Button variant="outline" className="border-black hover:bg-black hover:text-white">
                 SHOW ALL
               </Button>
-            </Link> */}
+            </Link>
             <div className="flex space-x-2">
               <Button
                 variant="outline"
