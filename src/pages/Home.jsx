@@ -155,8 +155,6 @@
     }, [])
 
 
-
-
     const nextEvent = () => {
       setCurrentEventIndex((prev) => (prev + 1) % events.length)
     }
@@ -203,7 +201,7 @@
 
 
     // Animation for SVG letters
-     useEffect(() => {
+     useEffect(() => {  
       const words = ["TAMASHA", "NIGHTS", "MUSIC", "DANCE", "VIBES"];
     const container = document.getElementById("animator");
 
@@ -337,7 +335,7 @@
         </section> */}
 
         {/* UPCOMING events */}
-        {/* <section ref={ticketsRef} className="py-12 text-black">
+         <section ref={ticketsRef} className="py-12 text-black">
           <div className="container mx-auto px-4">
             <h2 className="text-4xl font-bold mb-12 ">UPCOMING EVENTS</h2>
 
@@ -407,7 +405,7 @@
             </div>
 
           </div>
-        </section> */}
+        </section> 
 
 
         <section className="py-12">
@@ -513,7 +511,7 @@
           </div>
         </section> */}
 
-        {/* <section className="py-16">
+         <section className="py-16">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center mb-12">
               <h2 className="text-4xl font-bold">MUSIC</h2>
@@ -563,35 +561,35 @@
               ))}
             </div>
           </div>
-        </section> */}
+        </section> 
 
 
         <section className="w-full min-h-screen flex flex-col justify-center items-center px-6 ">
-      <div className="max-w-3xl">
-        {/* Main Title */}
-        <h1 className="text-3xl font-bold mb-8  text-center">TAMASHA</h1>
+          <div className="max-w-4xl">
+            {/* Main Title */}
+            <h1 className="text-3xl font-bold mb-8  text-center">TAMASHA</h1>
 
-        {/* Subheading */}
-        <h2 className="text-2xl font-bold mb-6  text-center">Welcome to the future of nightlife.</h2>
+            {/* Subheading */}
+            <h2 className="text-2xl font-bold mb-6  text-center">Welcome to the future of nightlife.</h2>
 
-        {/* Paragraphs */}
-        <p className="text-lg text-gray-700 mb-4">
-          Tamasha is redefining nightlife experiences across the globe — an immersive world of music, dance, and culture where every night is unforgettable.
-        </p>
+            {/* Paragraphs */}
+            <p className="text-lg text-gray-700 mb-4">
+              Tamasha is redefining nightlife experiences across the globe — an immersive world of music, dance, and culture where every night is unforgettable.
+            </p>
 
-        <p className="text-lg text-gray-700 mb-4">
-          Our multi-room venues are designed to deliver the ultimate sensory experience, with cutting-edge sound, spectacular visuals, and top-tier DJs bringing the energy to life.
-        </p>
+            <p className="text-lg text-gray-700 mb-4">
+              Our multi-room venues are designed to deliver the ultimate sensory experience, with cutting-edge sound, spectacular visuals, and top-tier DJs bringing the energy to life.
+            </p>
 
-        <p className="text-lg text-gray-700 mb-4">
-          At Tamasha, every event is curated to perfection — from exclusive VIP experiences to vibrant dance floors that keep you moving all night long.
-        </p>
+            <p className="text-lg text-gray-700 mb-4">
+              At Tamasha, every event is curated to perfection — from exclusive VIP experiences to vibrant dance floors that keep you moving all night long.
+            </p>
 
-        <p className="text-lg text-gray-700">
-          Discover your new favorite party, indulge in luxury, and lose yourself in the rhythm. Welcome to Tamasha — where the night comes alive.
-        </p>
-      </div>
-    </section>
+            <p className="text-lg text-gray-700">
+              Discover your new favorite party, indulge in luxury, and lose yourself in the rhythm. Welcome to Tamasha — where the night comes alive.
+            </p>
+          </div>
+        </section>
       </div>
     )
   }
