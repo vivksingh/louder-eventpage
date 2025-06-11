@@ -28,6 +28,7 @@ const eventSlice = createSlice({
     initialState: {
         events: [],
         loading: true,
+        offline : false,
         error: null
     },
     reducers: {
@@ -58,14 +59,17 @@ const eventSlice = createSlice({
             .addCase(fetchEvents.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.offline = false;
             })
             .addCase(fetchEvents.fulfilled, (state, action) => {
                 state.loading = false;
                 state.events = action.payload;
                 state.error = null;
+                state.offline = false;
             })
             .addCase(fetchEvents.rejected, (state, action) => {
                 state.loading = false;
+                state.offline = true;
                 state.error = action.payload;
             });
     }

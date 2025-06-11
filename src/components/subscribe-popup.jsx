@@ -2,21 +2,23 @@ import React, { useState, useEffect } from "react"
 import { X } from "lucide-react"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
+import { useSelector } from "react-redux"
 
 export default function SubscribePopup() {
   const [isOpen, setIsOpen] = useState(false)
   const [email, setEmail] = useState("")
+  const offline = useSelector(state => state.Events.offline)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const hasSubscribed = localStorage.getItem("subscribed")
-      if (!hasSubscribed) {
+      if (!hasSubscribed && !offline) {
         setIsOpen(true)
       }
     }, 5000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [offline])
 
   const handleClose = () => {
     setIsOpen(false)

@@ -1,21 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button";
-
-const events = [
-  { id: 1, title: "SATURDAY NIGHT FEVER", date: "SAT 15 JUNE", image: "/placeholder.svg?height=800&width=600", slug: "saturday-night-fever-2025-06-15" },
-  { id: 2, title: "BOLLYWOOD BASH", date: "SAT 22 JUNE", image: "/placeholder.svg?height=800&width=600", slug: "bollywood-bash-2025-06-22" },
-  { id: 3, title: "RETRO CLASSICS", date: "SAT 29 JUNE", image: "/placeholder.svg?height=800&width=600", slug: "retro-classics-2025-06-29" },
-  { id: 4, title: "SUMMER VIBES", date: "SAT 06 JULY", image: "/placeholder.svg?height=800&width=600", slug: "summer-vibes-2025-07-06" },
-  { id: 5, title: "HOUSE MUSIC NIGHT", date: "SAT 13 JULY", image: "/placeholder.svg?height=800&width=600", slug: "house-music-night-2025-07-13" },
-  { id: 6, title: "HIP HOP TAKEOVER", date: "SAT 20 JULY", image: "/placeholder.svg?height=800&width=600", slug: "hip-hop-takeover-2025-07-20" },
-  { id: 7, title: "LATIN FUSION", date: "SAT 27 JULY", image: "/placeholder.svg?height=800&width=600", slug: "latin-fusion-2025-07-27" },
-  { id: 8, title: "TECHNO UNDERGROUND", date: "SAT 03 AUG", image: "/placeholder.svg?height=800&width=600", slug: "techno-underground-2025-08-03" },
-  { id: 9, title: "R&B CLASSICS", date: "SAT 10 AUG", image: "/placeholder.svg?height=800&width=600", slug: "rnb-classics-2025-08-10" },
-  { id: 10, title: "COMMERCIAL HITS", date: "SAT 17 AUG", image: "/placeholder.svg?height=800&width=600", slug: "commercial-hits-2025-08-17" },
-  { id: 11, title: "DEEP HOUSE SESSION", date: "SAT 24 AUG", image: "/placeholder.svg?height=800&width=600", slug: "deep-house-session-2025-08-24" },
-  { id: 12, title: "THROWBACK THURSDAY", date: "SAT 31 AUG", image: "/placeholder.svg?height=800&width=600", slug: "throwback-thursday-2025-08-31" },
-];
+import { useSelector } from "react-redux";
 
 // Month name mapping
 const MONTHS = [
@@ -47,24 +33,25 @@ const getNext4Months = () => {
   return next4;
 };
 
-// Helper to extract month from event.date string
+// Helper to extract month from start_date (ISO format)
 const getMonthFromDate = (dateStr) => {
-  const parts = dateStr.split(" ");
-  return parts[2]; // Example: "SAT 15 JUNE" → "JUNE"
+  const date = new Date(dateStr);
+  const monthIndex = date.getMonth(); // 0-based index
+  return MONTHS[monthIndex];
 };
 
 export default function Events() {
   const [filter, setFilter] = useState("ALL");
+  const events = useSelector((state) => state.Events.events);
 
   const next4Months = getNext4Months();
 
   const filteredEvents = events.filter((event) => {
-    const eventMonth = getMonthFromDate(event.date);
+    const eventMonth = getMonthFromDate(event.start_date);
 
     if (filter === "ALL") return true;
 
     if (filter === "UP NEXT") {
-      // Show next 4 upcoming events (based on array order — can be improved to use date)
       const eventIndex = events.indexOf(event);
       return eventIndex < 4;
     }
@@ -83,7 +70,9 @@ export default function Events() {
             <Button
               key={item}
               variant={filter === item ? "default" : "outline"}
-              className={`border-black ${filter === item ? "bg-black text-white" : "hover:bg-black hover:text-white"}`}
+              className={`border-black ${
+                filter === item ? "bg-black text-white" : "hover:bg-black hover:text-white"
+              }`}
               onClick={() => setFilter(item)}
             >
               {item}
@@ -94,30 +83,45 @@ export default function Events() {
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredEvents.map((event) => (
-            <div key={event.id} className="group">
+            <div key={event._id} className="group">
               <div className="relative aspect-[3/4] overflow-hidden mb-4">
                 <img
-                  src={event.image || "/placeholder.svg"}
-                  alt={event.title}
+                  src={event.imgsrc || "/placeholder.svg"}
+                  alt={event.name}
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
                 />
               </div>
-              <div className="mb-2 text-sm font-medium">{event.date}</div>
-              <h3 className="text-xl font-bold mb-4">{event.title}</h3>
+
+              <div className="mb-2 text-sm font-medium">
+                {new Date(event.start_date).toLocaleDateString("en-GB", {
+                  weekday: "short",
+                  day: "2-digit",
+                  month: "short",
+                  year: "numeric",
+                })}
+              </div>
+
+              <h3 className="text-xl font-bold mb-4">{event.name}</h3>
+
               <div className="space-y-2">
-                <Link to={`/event/tickets/${event.slug}`}>
+                <a href={event.redirection_url} target="_blank" rel="noopener noreferrer">
                   <Button className="w-full bg-black text-white hover:bg-gray-800">BUY TICKETS</Button>
-                </Link>
+                </a>
+
                 <Link to="/vip-tables">
-                  <Button variant="outline" className="w-full border-black hover:bg-black hover:text-white">
+                  <Button
+                    variant="outline"
+                    className="w-full border-black hover:bg-black hover:text-white"
+                  >
                     VIP TABLES
                   </Button>
                 </Link>
-                <Link to={`/event/${event.slug}`}>
+
+                <a href={event.redirection_url} target="_blank" rel="noopener noreferrer">
                   <Button variant="ghost" className="w-full hover:bg-gray-100">
                     FIND OUT MORE
                   </Button>
-                </Link>
+                </a>
               </div>
             </div>
           ))}

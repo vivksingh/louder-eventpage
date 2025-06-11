@@ -4,7 +4,8 @@
   import { ChartNoAxesColumnIcon, ChevronLeft, ChevronRight } from "lucide-react"
   import { useSelector, useDispatch } from "react-redux"
   import { fetchEvents } from "../features/event/eventSlice"
-  import Loader from "../components/Loader"
+  import OfflinePage from "./OfflinePage"
+  import FullPageLoader from "../components/FullPageLoader"
 
 //   const events = [
 //   {
@@ -185,12 +186,12 @@
       "TAMASHA CLUB - THE ULTIMATE NIGHTLIFE EXPERIENCE - EVERY SATURDAY NIGHT - ",
     )
     const [currentEventIndex, setCurrentEventIndex] = useState(0)
-    const [currentResidentIndex, setCurrentResidentIndex] = useState(0)
+    const [currentAllEventIndex, setCurrentAlleventIndex] = useState(0)
     const [currentSpecialEventIndex, setCurrentSpecialEventIndex] = useState(0)
     const [currentMusicIndex, setCurrentMusicIndex] = useState(0)
     const ticketsRef = useRef(null)
     const events = useSelector(state => state.Events.events);
-    
+    const offline = useSelector(state => state.Events.offline);
     const loading = useSelector(state => state.Events.loading);
     const error = useSelector(state => state.Events.error);
     const dispatch = useDispatch();
@@ -276,11 +277,11 @@
     }
 
     const nextResident = () => {
-      setCurrentResidentIndex((prev) => (prev + 1) % Math.ceil(residents.length / 4))
+      setCurrentResidentIndex((prev) => (prev + 1) % Math.ceil(events.length / 4))
     }
 
     const prevResident = () => {
-      setCurrentResidentIndex((prev) => (prev - 1 + Math.ceil(residents.length / 4)) % Math.ceil(residents.length / 4))
+      setCurrentResidentIndex((prev) => (prev - 1 + Math.ceil(events.length / 4)) % Math.ceil(events.length / 4))
     }
 
     const nextSpecialEvent = () => {
@@ -313,7 +314,8 @@
 
     return (
       <>
-      {loading ? (<Loader />) : 
+      {loading ? (<FullPageLoader />) : 
+        offline ? (<OfflinePage />) : 
         <div className="pt-12">
           <div>
 
@@ -349,48 +351,47 @@
 
             </section> */ }
 
+          {/* hero page section */}
+            <section className="h-screen flex flex-col justify-center items-center relative overflow-hidden">
 
-          <section className="h-screen flex flex-col justify-center items-center relative overflow-hidden">
+              {/* Video Background */}
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src="/vid1.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
 
-    {/* Video Background */}
-    <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      className="absolute inset-0 w-full h-full object-cover"
-    >
-      <source src="/vid1.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
+              {/* Overlay (optional — darkens video so text is readable) */}
+              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
-    {/* Overlay (optional — darkens video so text is readable) */}
-    <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+              {/* Word Animator */}
+              <div className="relative z-10 word-animator" id="animator"></div>
 
-    {/* Word Animator */}
-    <div className="relative z-10 word-animator" id="animator"></div>
-
-    {/* Tickets Section */}
-    <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-12 z-10">
-      <div className="text-white px-6 py-6 w-full max-w-2xl mb-12">
-        <h2 className="text-4xl font-bold mb-6 text-center p-2">TICKETS</h2>
-        <div className="flex justify-center space-x-4">
-          <Button
-            onClick={openReadMore}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8"
-          >
-            Read More
-          </Button>
-          <Link to="/vip-tables">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8">
-              VIP Tables
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  </section>
-            
+              {/* Tickets Section */}
+              <div className="absolute bottom-0 left-0 right-0 flex justify-center pb-12 z-10">
+                <div className="text-white px-6 py-6 w-full max-w-2xl mb-12">
+                  <h2 className="text-4xl font-bold mb-6 text-center p-2">TICKETS</h2>
+                  <div className="flex justify-center space-x-4">
+                    <Button
+                      onClick={openReadMore}
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8"
+                    >
+                      Read More
+                    </Button>
+                    <Link to="/vip-tables">
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-8">
+                        VIP Tables
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
 
           {/* <section className="py-4 overflow-hidden border-y border-black">
@@ -470,6 +471,7 @@
             </div>
           </section>  */}
 
+          {/* Upcoming events */}
           <section ref={ticketsRef} className="py-12 text-black">
             <div className="container mx-auto px-4">
               <h2 className="text-4xl font-bold mb-12">UPCOMING EVENTS</h2>
@@ -539,7 +541,7 @@
           </section>
 
 
-
+          {/* Events section */}
           <section className="py-12">
             <div className="container mx-auto px-4">
               <div className="flex justify-between items-center mb-12">
@@ -570,22 +572,23 @@
                   </div>
                 </div>
               </div>
-
+              
+              {/* Event slider */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {residents.slice(currentResidentIndex * 4, (currentResidentIndex + 1) * 4).map((resident) => (
-                  <div key={resident.id} className="text-center">
+                {events.slice(currentAllEventIndex * 4, (currentAllEventIndex + 1) * 4).map((event) => (
+                  <div key={event._id} className="text-center">
                     <div className="mb-4 aspect-square relative overflow-hidden rounded-lg shadow-lg">
                       <img
-                        src={resident.image || "/placeholder.svg"}
-                        alt={resident.name}
+                        src={event.imgsrc || "/placeholder.svg"}
+                        alt={event.name}
                         className="w-full h-full object-cover "
                       />
                     </div>
-                    <h3 className="text-xl font-bold">{resident.name}</h3>
-                    <p className="text-sm text-gray-600">{resident.genre}</p>
+                    <h3 className="text-xl font-bold">{event.name}</h3>
                   </div>
                 ))}
               </div>
+
             </div>
           </section>
 
