@@ -86,9 +86,9 @@ export default function Events() {
             <div key={event._id} className="group">
               <div className="relative aspect-[3/4] overflow-hidden mb-4">
                 <img
-                  src={event.imgsrc || "/placeholder.svg"}
+                  src={`http://localhost:5000/${event.imgsrc}` || "/placeholder.svg"}
                   alt={event.name}
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all"
+                  className="w-full rounded-lg h-full object-cover grayscale group-hover:grayscale-0 transition-all"
                 />
               </div>
 

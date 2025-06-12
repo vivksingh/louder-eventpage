@@ -2,52 +2,37 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminTopbar from "@/components/admin/AdminTopbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { fetchEvents } from "../../features/event/eventSlice";
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
 
 export default function AdminDashboard() {
-  const events = [
-    {
-      id: 1,
-      name: "Bollywood Blast Night",
-      start_date: "2025-07-10",
-      end_date: "2025-07-11",
-      created_on: "2025-06-10",
-      description: "An epic night of Bollywood music and dance.",
-      imgsrc: "https://source.unsplash.com/random/300x200?party",
-      redirection_url: "https://example.com/event/1",
-      status: true,
-    },
-    {
-      id: 2,
-      name: "Summer Beats Festival",
-      start_date: "2025-08-01",
-      end_date: "2025-08-02",
-      created_on: "2025-06-12",
-      description: "Outdoor music festival with international DJs.",
-      imgsrc: "https://source.unsplash.com/random/300x200?festival",
-      redirection_url: "https://example.com/event/2",
-      status: false,
-    },
-    {
-      id: 3,
-      name: "Retro Bollywood Disco",
-      start_date: "2025-09-15",
-      end_date: "2025-09-15",
-      created_on: "2025-06-14",
-      description: "Retro-themed Bollywood disco party.",
-      imgsrc: "https://source.unsplash.com/random/300x200?disco",
-      redirection_url: "https://example.com/event/3",
-      status: true,
-    },
-  ];
+  const events = useSelector((state) => state.Events.events);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchEvents());
+  }, [dispatch]);
+
+  // Helper to format ISO date
+  const formatDate = (isoDate) => {
+    if (!isoDate) return "";
+    const date = new Date(isoDate);
+    return date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }); // Example: 1 Jul 2025
+  };
 
   return (
     <div className="flex">
@@ -73,13 +58,11 @@ export default function AdminDashboard() {
                 {events.map((event) => (
                   <TableRow key={event.id}>
                     <TableCell className="font-medium">{event.name}</TableCell>
-                    <TableCell>{event.start_date}</TableCell>
-                    <TableCell>{event.end_date}</TableCell>
-                    <TableCell>{event.created_on}</TableCell>
-                    <TableCell>
-                      {event.description.length > 60
-                        ? event.description.slice(0, 60) + "..."
-                        : event.description}
+                    <TableCell>{formatDate(event.start_date)}</TableCell>
+                    <TableCell>{formatDate(event.end_date)}</TableCell>
+                    <TableCell>{formatDate(event.created_on)}</TableCell>
+                    <TableCell className="max-w-[300px] truncate">
+                      {event.description}
                     </TableCell>
                     <TableCell>
                       <Badge variant={event.status ? "default" : "destructive"}>
@@ -87,12 +70,9 @@ export default function AdminDashboard() {
                       </Badge>
                     </TableCell>
                     <TableCell className="space-x-2">
-                      
-                      <Link to={`/admin/edit-event/${event.id}`}>
-                        <Button className="size-sm">
-                            Edit
-                        </Button>
-                        </Link>
+                      <Link to={`/admin/edit-event/${event._id}`}>
+                        <Button className="size-sm">Edit</Button>
+                      </Link>
                     </TableCell>
                   </TableRow>
                 ))}

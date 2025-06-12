@@ -1,19 +1,28 @@
-import { useState } from "react"
-import { Button } from "../components/ui/button"
-import { Input } from "../components/ui/input"
-import { Label } from "../components/ui/label"
-import { Textarea } from "../components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
-
-// Sample events data - in a real app, this would come from an API
-const events = [
-  { id: "1", name: "SATURDAY NIGHT FEVER - SAT 15 JUNE" },
-  { id: "2", name: "BOLLYWOOD BASH - SAT 22 JUNE" },
-  { id: "3", name: "RETRO CLASSICS - SAT 29 JUNE" },
-  { id: "4", name: "SUMMER VIBES - SAT 06 JULY" },
-]
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../components/ui/dialog";
 
 export default function VipTables() {
+  const events = useSelector((state) => state.Events.events);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,23 +30,50 @@ export default function VipTables() {
     event: "",
     guests: "",
     message: "",
-  })
+  });
+
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelectChange = (name, value) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log("Form submitted:", formData)
-    alert("Your VIP table request has been submitted. We'll contact you shortly.")
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:5000/api/event/vip-table", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log("Form submitted:", formData);
+        setShowSuccessPopup(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          event: "",
+          guests: "",
+          message: "",
+        });
+      } else {
+        const errorData = await response.json();
+        console.error("Error submitting form:", errorData);
+      }
+    } catch (error) {
+      console.error("Network error submitting form:", error);
+    }
+  };
 
   return (
     <div className="pt-24 pb-16">
@@ -98,7 +134,14 @@ export default function VipTables() {
 
                 <div>
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} required />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
 
                 <div>
@@ -114,7 +157,7 @@ export default function VipTables() {
                     </SelectTrigger>
                     <SelectContent>
                       {events.map((event) => (
-                        <SelectItem key={event.id} value={event.id}>
+                        <SelectItem key={event.name} value={event.name}>
                           {event.name}
                         </SelectItem>
                       ))}
@@ -140,7 +183,13 @@ export default function VipTables() {
 
                 <div>
                   <Label htmlFor="message">Special Requests</Label>
-                  <Textarea id="message" name="message" value={formData.message} onChange={handleChange} rows={4} />
+                  <Textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={4}
+                  />
                 </div>
 
                 <div className="pt-2">
@@ -158,6 +207,23 @@ export default function VipTables() {
           </div>
         </div>
       </div>
+
+      {/* Success Popup */}
+      <Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Thank you!</DialogTitle>
+            <DialogDescription>
+              Your VIP table request has been submitted. We'll contact you shortly.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setShowSuccessPopup(false)} className="bg-black text-white hover:bg-gray-800">
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
-  )
+  );
 }

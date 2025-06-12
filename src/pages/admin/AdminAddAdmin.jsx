@@ -20,18 +20,69 @@ export default function AdminAddAdmin() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    // You should validate passwords match here
-    if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match!");
+    return;
+  }
+
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("http://localhost:5000/api/admin/add-admin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `${token}`,
+      },
+      body: JSON.stringify({
+        username: formData.username,
+        email: formData.email,
+        password: formData.password,
+        status: formData.status,
+      }),
+    });
+
+    const contentType = response.headers.get("content-type");
+
+    if (response.ok) {
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        console.log("Success:", data);
+      } else {
+        const text = await response.text();
+        console.log("Success (non-JSON):", text);
+      }
+
+      alert("Admin added successfully!");
+
+      // Reset form
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        status: true,
+      });
+    } else {
+      if (contentType && contentType.includes("application/json")) {
+        const errorData = await response.json();
+        console.error("Error adding admin:", errorData);
+        alert(errorData.message || "Error adding admin.");
+      } else {
+        const text = await response.text();
+        console.error("Error adding admin (non-JSON):", text);
+        alert("Error adding admin.");
+      }
     }
+  } catch (error) {
+    console.error("Network error adding admin:", error);
+    alert("Network error. Please try again later.");
+  }
+};
 
-    // TODO: Call your API to add admin here
-    console.log("Submitting admin data:", formData);
-  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -112,7 +163,7 @@ export default function AdminAddAdmin() {
 
               <Button
                 type="submit"
-                className="px-6 py-2 text-base bg-indigo-600 hover:bg-indigo-700 text-white"
+                className="px-6 py-2 text-base text-white"
               >
                 Add Admin
               </Button>

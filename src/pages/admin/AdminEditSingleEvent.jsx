@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminTopbar from "@/components/admin/AdminTopbar";
@@ -10,33 +11,71 @@ import { Switch } from "@/components/ui/switch";
 
 export default function AdminEditSingleEvent() {
   const { id } = useParams();
+  const events = useSelector((state) => state.Events.events);
+  const event = events.find((e) => e._id === id);
+
   const [eventData, setEventData] = useState(null);
   const [status, setStatus] = useState(true);
+  const [newImage, setNewImage] = useState(null);
 
   useEffect(() => {
-    // Example fetch — replace with actual API call:
-    const fetchEventData = async () => {
-      // Simulate API response
-      const mockEvent = {
-        id,
-        name: "Event Example",
-        start_date: "2025-06-20",
-        end_date: "2025-06-21",
-        description: "Example event description.",
-        imgsrc: "https://example.com/event.jpg",
-        redirection_url: "https://example.com",
-        status: true,
-      };
-      setEventData(mockEvent);
-      setStatus(mockEvent.status);
-    };
+    if (event) {
+      setEventData(event);
+      setStatus(event.status);
+    }
+  }, [event]);
 
-    fetchEventData();
-  }, [id]);
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-  const handleSave = () => {
-    // Send updated eventData to backend (PUT or PATCH request)
-    console.log("Saving event:", { ...eventData, status });
+      const form = new FormData();
+      form.append("name", eventData.name);
+      form.append("start_date", eventData.start_date);
+      form.append("end_date", eventData.end_date);
+      form.append("description", eventData.description);
+      form.append("redirection_url", eventData.redirection_url);
+      form.append("status", status.toString());
+
+      if (newImage) {
+        form.append("image", newImage);
+      }
+
+      const response = await fetch(`http://localhost:5000/api/event/edit-event/${id}`, {
+        method: "POST",
+        headers: {
+          authorization: `${token}`,
+        },
+        body: form,
+      });
+
+      const contentType = response.headers.get("content-type");
+
+      if (response.ok) {
+        if (contentType && contentType.includes("application/json")) {
+          const data = await response.json();
+          console.log("Success:", data);
+        } else {
+          const text = await response.text();
+          console.log("Success (non-JSON):", text);
+        }
+
+        alert("Event updated successfully!");
+      } else {
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          console.error("Error updating event:", errorData);
+          alert("Error updating event.");
+        } else {
+          const text = await response.text();
+          console.error("Error updating event (non-JSON):", text);
+          alert("Error updating event.");
+        }
+      }
+    } catch (error) {
+      console.error("Network error updating event:", error);
+      alert("Network error. Please try again later.");
+    }
   };
 
   if (!eventData) return <div>Loading...</div>;
@@ -47,7 +86,7 @@ export default function AdminEditSingleEvent() {
       <div className="flex-1">
         <AdminTopbar />
         <div className="max-w-4xl mx-auto px-6 py-10">
-          <h2 className="text-4xl font-bold mb-8 text-gray-800">Edit Event id : {id}</h2>
+          <h2 className="text-4xl font-bold mb-8 text-gray-800">Edit Event ID: {id}</h2>
 
           <div className="bg-white shadow rounded-xl py-4 p-8 space-y-6 border border-gray-300">
             <div className="space-y-2">
@@ -66,7 +105,7 @@ export default function AdminEditSingleEvent() {
                 <Label>Start Date</Label>
                 <Input
                   type="date"
-                  value={eventData.start_date}
+                  value={eventData.start_date.slice(0, 10)}
                   onChange={(e) =>
                     setEventData({ ...eventData, start_date: e.target.value })
                   }
@@ -76,7 +115,7 @@ export default function AdminEditSingleEvent() {
                 <Label>End Date</Label>
                 <Input
                   type="date"
-                  value={eventData.end_date}
+                  value={eventData.end_date.slice(0, 10)}
                   onChange={(e) =>
                     setEventData({ ...eventData, end_date: e.target.value })
                   }
@@ -96,13 +135,20 @@ export default function AdminEditSingleEvent() {
             </div>
 
             <div className="space-y-2">
-              <Label>Image URL</Label>
+              <Label>Current Image</Label>
+              <img
+                src={`http://localhost:5000/${eventData.imgsrc}`}
+                alt="Event"
+                className="w-64 rounded"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Upload New Image (optional)</Label>
               <Input
-                type="url"
-                value={eventData.imgsrc}
-                onChange={(e) =>
-                  setEventData({ ...eventData, imgsrc: e.target.value })
-                }
+                type="file"
+                accept="image/*"
+                onChange={(e) => setNewImage(e.target.files[0])}
               />
             </div>
 
@@ -112,7 +158,10 @@ export default function AdminEditSingleEvent() {
                 type="url"
                 value={eventData.redirection_url}
                 onChange={(e) =>
-                  setEventData({ ...eventData, redirection_url: e.target.value })
+                  setEventData({
+                    ...eventData,
+                    redirection_url: e.target.value,
+                  })
                 }
               />
             </div>

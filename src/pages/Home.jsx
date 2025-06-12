@@ -1,4 +1,4 @@
-  import React, { useState, useEffect, useRef } from "react"
+  import { useState, useEffect, useRef } from "react"
   import { Link } from "react-router-dom"
   import { Button } from "../components/ui/button"
   import { ChartNoAxesColumnIcon, ChevronLeft, ChevronRight } from "lucide-react"
@@ -6,147 +6,8 @@
   import { fetchEvents } from "../features/event/eventSlice"
   import OfflinePage from "./OfflinePage"
   import FullPageLoader from "../components/FullPageLoader"
+  import SignupPromo from "../components/SignupPromo"
 
-//   const events = [
-//   {
-//     _id: "6847da5d7a3a12a3c1a753ab",
-//     name: "Summer Music Festival",
-//     start_date: "2025-07-20T18:00:00.000Z",
-//     end_date: "2025-07-21T02:00:00.000Z",
-//     created_on: "2025-06-10T07:03:52.347Z",
-//     description: "Join us for an unforgettable night of live music, food, and fun under the stars!",
-//     imgsrc: "https://example.com/images/event-summer-festival.jpg",
-//     redirection_url: "https://example.com/event/summer-festival-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-//   {
-//     _id: "7848fa6c9b1e43c9c3f45bdf",
-//     name: "Bollywood Bash",
-//     start_date: "2025-07-27T19:00:00.000Z",
-//     end_date: "2025-07-28T03:00:00.000Z",
-//     created_on: "2025-06-11T09:15:22.347Z",
-//     description: "Experience the best Bollywood hits and dance the night away!",
-//     imgsrc: "https://example.com/images/event-bollywood-bash.jpg",
-//     redirection_url: "https://example.com/event/bollywood-bash-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-//   {
-//     _id: "4597bd9c2f7e34b5c9f27aba",
-//     name: "House Music Night",
-//     start_date: "2025-08-03T20:00:00.000Z",
-//     end_date: "2025-08-04T04:00:00.000Z",
-//     created_on: "2025-06-12T10:22:30.347Z",
-//     description: "Feel the beat with the latest and greatest house tracks!",
-//     imgsrc: "https://example.com/images/event-house-music-night.jpg",
-//     redirection_url: "https://example.com/event/house-music-night-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-//   {
-//     _id: "9b5dca7e72f04f10a789cd9e",
-//     name: "Hip Hop Takeover",
-//     start_date: "2025-08-10T21:00:00.000Z",
-//     end_date: "2025-08-11T05:00:00.000Z",
-//     created_on: "2025-06-13T11:30:15.347Z",
-//     description: "Non-stop hip hop and urban beats all night long.",
-//     imgsrc: "https://example.com/images/event-hip-hop-takeover.jpg",
-//     redirection_url: "https://example.com/event/hip-hop-takeover-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-//   {
-//     _id: "5f6ae3b6742d47f3b123cd0e",
-//     name: "Latin Fusion Fiesta",
-//     start_date: "2025-08-17T19:30:00.000Z",
-//     end_date: "2025-08-18T02:30:00.000Z",
-//     created_on: "2025-06-14T12:45:00.347Z",
-//     description: "Spicy Latin beats and a night full of salsa and bachata!",
-//     imgsrc: "https://example.com/images/event-latin-fusion.jpg",
-//     redirection_url: "https://example.com/event/latin-fusion-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-//   {
-//     _id: "a74fe29391d8420b8a7a8cde",
-//     name: "Techno Underground",
-//     start_date: "2025-08-24T23:00:00.000Z",
-//     end_date: "2025-08-25T06:00:00.000Z",
-//     created_on: "2025-06-15T14:10:00.347Z",
-//     description: "Lose yourself to deep techno vibes in an underground setting.",
-//     imgsrc: "https://example.com/images/event-techno-underground.jpg",
-//     redirection_url: "https://example.com/event/techno-underground-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-//   {
-//     _id: "f4c8ecba58154d0e9184bcef",
-//     name: "Retro Classics Night",
-//     start_date: "2025-08-31T18:00:00.000Z",
-//     end_date: "2025-09-01T02:00:00.000Z",
-//     created_on: "2025-06-16T15:25:00.347Z",
-//     description: "Dance to the greatest hits from the 70s, 80s, and 90s.",
-//     imgsrc: "https://example.com/images/event-retro-classics.jpg",
-//     redirection_url: "https://example.com/event/retro-classics-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-//   {
-//     _id: "6cb2f07a342a4b3e98cfb8bd",
-//     name: "NYE Party 2025",
-//     start_date: "2025-12-31T20:00:00.000Z",
-//     end_date: "2026-01-01T04:00:00.000Z",
-//     created_on: "2025-06-17T16:35:00.347Z",
-//     description: "Ring in the New Year with style — the biggest party of the year!",
-//     imgsrc: "https://example.com/images/event-nye-2025.jpg",
-//     redirection_url: "https://example.com/event/nye-party-2025-tickets",
-//     status: true,
-//     __v: 0,
-//   },
-// ]
-
-
-  const residents = [
-    { id: 1, name: "DJ SMITH", image: "https://tixmojo.com/useruploads/events/main_d6360e60a5.jpg", genre: "House" },
-    { id: 2, name: "DJ RODRIGUEZ", image: "https://tixmojo.com/useruploads/events/main_4dbd75357a.jpg", genre: "Hip Hop" },
-    { id: 3, name: "DJ PATEL", image: "https://tixmojo.com/useruploads/events/main_a38b3715ca.jpg", genre: "Bollywood" },
-    { id: 4, name: "DJ WILLIAMS", image: "https://tixmojo.com/useruploads/events/main_35e7128aed.jpg", genre: "R&B" },
-    { id: 5, name: "DJ CHEN", image: "https://tixmojo.com/useruploads/events/main_d6360e60a5.jpg", genre: "Electronic" },
-    { id: 6, name: "DJ GARCIA", image: "https://tixmojo.com/useruploads/events/main_283ca5989c.jpg", genre: "Latin" },
-    { id: 7, name: "DJ JOHNSON", image: "https://tixmojo.com/useruploads/events/main_d7aeffe4fa.jpg", genre: "Techno" },
-  ]
-
-  const specialEvents = [
-    {
-      id: 1,
-      title: "NEW YEAR'S EVE",
-      date: "31 DEC",
-      image: "https://tixmojo.com/useruploads/events/main_4dbd75357a.jpg",
-      link: "/event/new-years-eve-2025-12-31",
-    },
-    {
-      id: 2,
-      title: "VALENTINE'S SPECIAL",
-      date: "14 FEB",
-      image: "https://tixmojo.com/useruploads/events/main_4dbd75357a.jpg",
-      link: "/event/valentines-special-2026-02-14",
-    },
-    {
-      id: 3,
-      title: "HALLOWEEN HORROR",
-      date: "31 OCT",
-      image: "https://tixmojo.com/useruploads/events/main_a38b3715ca.jpg",
-      link: "/event/halloween-horror-2025-10-31",
-    },
-    {
-      id: 4,
-      title: "SUMMER FESTIVAL",
-      date: "15 AUG",
-      image: "https://tixmojo.com/useruploads/events/main_35e7128aed.jpg",
-      link: "/event/summer-festival-2025-08-15",
-    },
-  ]
 
   const musicPlaylists = [
     {
@@ -277,11 +138,11 @@
     }
 
     const nextResident = () => {
-      setCurrentResidentIndex((prev) => (prev + 1) % Math.ceil(events.length / 4))
+      setCurrentAlleventIndex((prev) => (prev + 1) % Math.ceil(events.length / 4))
     }
 
     const prevResident = () => {
-      setCurrentResidentIndex((prev) => (prev - 1 + Math.ceil(events.length / 4)) % Math.ceil(events.length / 4))
+      setCurrentAlleventIndex((prev) => (prev - 1 + Math.ceil(events.length / 4)) % Math.ceil(events.length / 4))
     }
 
     const nextSpecialEvent = () => {
@@ -507,9 +368,9 @@
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <img
-                      src={events[currentEventIndex].imgsrc || "/placeholder.svg"}
+                      src={`http://localhost:5000/${events[currentEventIndex].imgsrc}` || "/placeholder.svg"}
                       alt={events[currentEventIndex].name}
-                      className="max-w-sm h-auto aspect-[3/4] object-cover flex justify-center items-center mx-auto mb-6 rounded-lg shadow-lg"
+                      className="max-w-sm h-[300px] aspect-[3/4] object-cover flex justify-center items-center mx-auto mb-6 rounded-lg shadow-lg"
                     />
                   </div>
 
@@ -547,7 +408,7 @@
               <div className="flex justify-between items-center mb-12">
                 <h2 className="text-4xl font-bold">EVENTS</h2>
                 <div className="flex items-center space-x-4">
-                  <Link to="/residents">
+                  <Link to="/events">
                     <Button variant="outline" className="border-black hover:bg-black hover:text-white">
                       SHOW ALL
                     </Button>
@@ -579,9 +440,9 @@
                   <div key={event._id} className="text-center">
                     <div className="mb-4 aspect-square relative overflow-hidden rounded-lg shadow-lg">
                       <img
-                        src={event.imgsrc || "/placeholder.svg"}
+                        src={`http://localhost:5000/${event.imgsrc}` || "/placeholder.svg"}
                         alt={event.name}
-                        className="w-full h-full object-cover "
+                        className="w-full h-full object-cover"
                       />
                     </div>
                     <h3 className="text-xl font-bold">{event.name}</h3>
@@ -699,7 +560,7 @@
           </section> 
 
 
-          <section className="w-full min-h-screen flex flex-col justify-center items-center px-6 ">
+          <section className="w-full flex flex-col justify-center items-center px-6 py-12">
             <div className="max-w-4xl">
               {/* Main Title */}
               <h1 className="text-3xl font-bold mb-8  text-center">TAMASHA</h1>
@@ -725,6 +586,8 @@
               </p>
             </div>
           </section>
+
+          <SignupPromo />
         </div>
       }
       </>

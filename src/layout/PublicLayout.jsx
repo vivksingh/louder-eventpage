@@ -6,9 +6,9 @@ import SubscribePopup from "../components/subscribe-popup.jsx";
 
 export default function PublicLayout(){
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen flex flex-col">
             <Header />
-            <main className="min-h-screen">
+            <main className="flex-1">
                 <Outlet />
             </main>
             <Footer />

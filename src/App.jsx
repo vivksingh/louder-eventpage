@@ -34,6 +34,7 @@ import RequireAdminAuth from './components/admin/RequireAdminAuth'
 import AdminEditSingleEvent from './pages/admin/AdminEditSingleEvent'
 import AdminAddAdmin from './pages/admin/AdminAddAdmin'
 import NotFound from './pages/NotFound'
+import SignupPromo from './components/SignupPromo'
 
 function App() {
   return (

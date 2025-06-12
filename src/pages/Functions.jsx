@@ -1,11 +1,28 @@
-import { useState } from "react"
-import { Button } from "../components/ui/button"
-import { Input } from "../components/ui/input"
-import { Label } from "../components/ui/label"
-import { Textarea } from "../components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Textarea } from "../components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../components/ui/dialog";
 
 export default function Functions() {
+  const events = useSelector((state) => state.Events.events);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,23 +33,58 @@ export default function Functions() {
     guests: "",
     budget: "",
     message: "",
-  })
+  });
+
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSelectChange = (name, value) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log("Form submitted:", formData)
-    alert("Your function inquiry has been submitted. We'll contact you shortly.")
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/event/add-function-inquiry",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (response.ok) {
+        console.log("Form submitted:", formData);
+        setShowSuccessPopup(true);
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          eventType: "",
+          date: "",
+          guests: "",
+          budget: "",
+          message: "",
+        });
+      } else {
+        const errorData = await response.json();
+        console.error("Error submitting form:", errorData);
+        alert("There was an error submitting your inquiry. Please try again.");
+      }
+    } catch (error) {
+      console.error("Network error submitting form:", error);
+      alert("There was a network error. Please try again later.");
+    }
+  };
 
   return (
     <div className="pt-24 pb-16">
@@ -153,10 +205,10 @@ export default function Functions() {
                       <SelectValue placeholder="Select budget range" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="£500-£1000">£500-£1000</SelectItem>
-                      <SelectItem value="£1001-£2500">£1001-£2500</SelectItem>
-                      <SelectItem value="£2501-£5000">£2501-£5000</SelectItem>
-                      <SelectItem value="£5001+">£5001+</SelectItem>
+                      <SelectItem value="AUD 500 - AUD 1000">AUD 500 - AUD 1000</SelectItem>
+                      <SelectItem value="AUD 1001 - AUD 2500">AUD 1001 - AUD 2500</SelectItem>
+                      <SelectItem value="AUD 2501 - AUD 5000">AUD 2501 - AUD 5000</SelectItem>
+                      <SelectItem value="AUD 5001+">AUD 5001+</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -181,6 +233,23 @@ export default function Functions() {
           </div>
         </div>
       </div>
+
+      {/* Success Popup */}
+      <Dialog open={showSuccessPopup} onOpenChange={setShowSuccessPopup}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Thank you!</DialogTitle>
+            <DialogDescription>
+              Your function inquiry has been submitted. We'll contact you shortly.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setShowSuccessPopup(false)} className="bg-black text-white hover:bg-gray-800">
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
-  )
+  );
 }
