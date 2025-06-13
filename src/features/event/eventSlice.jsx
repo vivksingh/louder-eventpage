@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+const API_URL = import.meta.env.VITE_API_URL;
 // Thunk for fetching events
 export const fetchEvents = createAsyncThunk(
     'events/fetchEvents',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await fetch("http://localhost:5000/api/event/getAllEvents"); // You can later use "/api/event/getAllEvents" with proxy
+            const response = await fetch(`${API_URL}/api/event/getAllEvents`); // You can later use "/api/event/getAllEvents" with proxy
             //console.log("Fetch response:", response);
 
             if (!response.ok) {

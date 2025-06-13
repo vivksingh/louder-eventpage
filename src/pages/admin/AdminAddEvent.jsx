@@ -38,6 +38,7 @@ export default function AdminAddEvent() {
 
     try {
       const token = localStorage.getItem("token");
+      const API_URL = import.meta.env.VITE_API_URL;
 
       const form = new FormData();
       form.append("name", formData.name);
@@ -48,7 +49,7 @@ export default function AdminAddEvent() {
       form.append("status", status.toString());
       form.append("image", formData.image);
 
-      const response = await fetch("http://localhost:5000/api/event/add-event", {
+      const response = await fetch(`${API_URL}/api/event/add-event`, {
         method: "POST",
         headers: {
           authorization: `${token}`,

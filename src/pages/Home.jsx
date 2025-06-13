@@ -42,6 +42,7 @@
     },
   ]
 
+
   export default function Home() {
     const [scrollText, setScrollText] = useState(
       "TAMASHA CLUB - THE ULTIMATE NIGHTLIFE EXPERIENCE - EVERY SATURDAY NIGHT - ",
@@ -450,7 +451,7 @@
                   <div key={event._id} className="text-center group">
                     <div className="mb-4 aspect-square relative overflow-hidden rounded-lg shadow-lg">
                       <img
-                        src={`http://localhost:5000/${event.imgsrc}` || "/placeholder.svg"}
+                        src={`http://147.79.70.30::5000/${event.imgsrc}` || "/placeholder.svg"}
                         alt={event.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />

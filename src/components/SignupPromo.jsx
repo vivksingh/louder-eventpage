@@ -10,6 +10,7 @@ export default function SubscribeForm() {
     number: "",
   });
 
+  const API_URL = import.meta.env.VITE_API_URL;
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -26,7 +27,7 @@ export default function SubscribeForm() {
     setSuccess(false);
 
     try {
-      const response = await fetch("http://localhost:5000/api/event/subscribe", {
+      const response = await fetch(`${API_URL}/api/event/subscribe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

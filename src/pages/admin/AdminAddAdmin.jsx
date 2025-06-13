@@ -30,8 +30,8 @@ export default function AdminAddAdmin() {
 
   try {
     const token = localStorage.getItem("token");
-
-    const response = await fetch("http://localhost:5000/api/admin/add-admin", {
+    const API_URL = import.meta.env.VITE_API_URL;
+    const response = await fetch(`${API_URL}/api/admin/add-admin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

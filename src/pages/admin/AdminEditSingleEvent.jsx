@@ -28,6 +28,7 @@ export default function AdminEditSingleEvent() {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("token");
+      const API_URL = import.meta.env.VITE_API_URL;
 
       const form = new FormData();
       form.append("name", eventData.name);
@@ -41,7 +42,7 @@ export default function AdminEditSingleEvent() {
         form.append("image", newImage);
       }
 
-      const response = await fetch(`http://localhost:5000/api/event/edit-event/${id}`, {
+      const response = await fetch(`${API_URL}/api/event/edit-event/${id}`, {
         method: "POST",
         headers: {
           authorization: `${token}`,

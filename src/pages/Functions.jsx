@@ -45,13 +45,13 @@ export default function Functions() {
   const handleSelectChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+const API_URL = import.meta.env.VITE_API_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await fetch(
-        "http://localhost:5000/api/event/add-function-inquiry",
+        `${API_URL}/api/event/add-function-inquiry`,
         {
           method: "POST",
           headers: {
