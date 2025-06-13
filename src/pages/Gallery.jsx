@@ -21,7 +21,7 @@ export default function Gallery() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {galleryImages.map((image) => (
-            <div key={image.id} className="aspect-square relative overflow-hidden group">
+            <div key={image.id} className="aspect-square relative overflow-hidden group rounded-lg">
               <img
                 src={image.src || "/placeholder.svg"}
                 alt={image.alt}

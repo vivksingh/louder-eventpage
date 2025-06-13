@@ -1,8 +1,10 @@
-import React from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import FullPageLoader from './components/FullPageLoader';
+import OfflinePage from './pages/OfflinePage'; // import this
+import { useEffect } from 'react';
+import { fetchEvents } from './features/event/eventSlice';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Header from './components/header'
-import Footer from './components/footer'
-import SubscribePopup from './components/subscribe-popup'
 import { ThemeProvider } from './components/theme-provider'
 
 // Import pages
@@ -34,77 +36,70 @@ import RequireAdminAuth from './components/admin/RequireAdminAuth'
 import AdminEditSingleEvent from './pages/admin/AdminEditSingleEvent'
 import AdminAddAdmin from './pages/admin/AdminAddAdmin'
 import NotFound from './pages/NotFound'
-import SignupPromo from './components/SignupPromo'
+import CardComponent from './components/CardComponent';
 
 function App() {
+  const dispatch = useDispatch();
+  const loading = useSelector(state => state.Events.loading);
+  const offline = useSelector(state => state.Events.offline);
+
+  useEffect(() => {
+    dispatch(fetchEvents());  // FIXED: this was missing ()
+  }, [dispatch]);
+
+  if (offline) {
+    return <OfflinePage />;
+  }
+
+  if (loading) {
+    return (
+      <FullPageLoader />
+    );
+  }
+
   return (
     <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
       <Router>
-            {/* <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/about-club" element={<AboutClub />} />
-              <Route path="/careers" element={<Careers />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/events" element={<Events />} />
-              <Route path="/event/:slug" element={<EventDetails />} />
-              <Route path="/event/tickets/:slug" element={<EventTickets />} />
-              <Route path="/faqs" element={<FAQs />} />
-              <Route path="/functions" element={<Functions />} />
-              <Route path="/gallery" element={<Gallery />} />
-              <Route path="/music" element={<Music />} />
-              <Route path="/offers" element={<Offers />} />
-              <Route path="/residents" element={<Residents />} />
-              <Route path="/special-events" element={<SpecialEvents />} />
-              <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-              <Route path="/venue" element={<Venue />} />
-              <Route path="/vip-tables" element={<VipTables />} />
+        <Routes>
+          <Route path="/" element={<PublicLayout />}>
+            <Route index element={<Home />} />
+            <Route path="about" element={<About />} />
+            <Route path="about-club" element={<AboutClub />} />
+            <Route path="careers" element={<Careers />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="events" element={<Events />} />
+            <Route path="event/:slug" element={<EventDetails />} />
+            <Route path="event/tickets/:slug" element={<EventTickets />} />
+            <Route path="faqs" element={<FAQs />} />
+            <Route path="functions" element={<Functions />} />
+            <Route path="gallery" element={<Gallery />} />
+            <Route path="music" element={<Music />} />
+            <Route path="offers" element={<Offers />} />
+            <Route path="residents" element={<Residents />} />
+            <Route path="special-events" element={<SpecialEvents />} />
+            <Route path="terms-and-conditions" element={<TermsAndConditions />} />
+            <Route path="venue" element={<Venue />} />
+            <Route path="vip-tables" element={<VipTables />} />
+            <Route path="test" element={<CardComponent />} />
+          </Route>
 
-              <Route path="/admin/login" element={<AdminLogin/>} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-              <Route path="/admin/add-event" element={<AdminAddEvent />} />
-              <Route path="/admin/edit-events" element={<AdminEditEvents />} /> 
-            </Routes> */}
-          <Routes>
-            <Route path ="/" element = {<PublicLayout /> }>
-              <Route index element = {<Home />}></Route>
-              <Route path="about" element={<About />} />
-              <Route path="about-club" element={<AboutClub />} />
-              <Route path="careers" element={<Careers />} />
-              <Route path="contact" element={<Contact />} />
-              <Route path="events" element={<Events />} />
-              <Route path="event/:slug" element={<EventDetails />} />
-              <Route path="event/tickets/:slug" element={<EventTickets />} />
-              <Route path="faqs" element={<FAQs />} />
-              <Route path="functions" element={<Functions />} />
-              <Route path="gallery" element={<Gallery />} />
-              <Route path="music" element={<Music />} />
-              <Route path="offers" element={<Offers />} />
-              <Route path="residents" element={<Residents />} />
-              <Route path="special-events" element={<SpecialEvents />} />
-              <Route path="terms-and-conditions" element={<TermsAndConditions />} />
-              <Route path="venue" element={<Venue />} />
-              <Route path="vip-tables" element={<VipTables />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<AdminLogin />} />
+            <Route path="login" element={<AdminLogin />} />
+
+            <Route element={<RequireAdminAuth />}>
+              <Route path="dashboard" element={<AdminDashboard />} />
+              <Route path="add-admin" element={<AdminAddAdmin />} />
+              <Route path="edit-event/:id" element={<AdminEditSingleEvent />} />
+              <Route path="add-event" element={<AdminAddEvent />} />
             </Route>
+          </Route>
 
-            <Route path = "/admin" element = {<AdminLayout />}>
-              <Route index element = {<AdminLogin />} />
-              <Route path = "login" element = {<AdminLogin />} />
-
-              <Route element={<RequireAdminAuth />}>
-                <Route path = "dashboard"  element = {<AdminDashboard/>} />
-                <Route path="add-admin" element={<AdminAddAdmin />} />
-                {/* <Route path = "edit-event" element = {<AdminEditEvents />} /> */}
-                <Route path="edit-event/:id" element={<AdminEditSingleEvent />} />
-                <Route path = "add-event" element = {<AdminAddEvent />} />
-              </Route>
-            </Route>
-
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Router>
     </ThemeProvider>
-  )
+  );
 }
 
 export default App;

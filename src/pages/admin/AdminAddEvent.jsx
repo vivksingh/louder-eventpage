@@ -59,6 +59,7 @@ export default function AdminAddEvent() {
 
       if (response.ok) {
         alert("Event added successfully!");
+
         // Reset form
         setFormData({
           name: "",

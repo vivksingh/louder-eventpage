@@ -2,9 +2,8 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import AdminTopbar from "@/components/admin/AdminTopbar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useSelector, useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { fetchEvents } from "../../features/event/eventSlice";
+import { useSelector } from "react-redux";
+
 import {
   Table,
   TableBody,
@@ -17,11 +16,6 @@ import { Link } from "react-router-dom";
 
 export default function AdminDashboard() {
   const events = useSelector((state) => state.Events.events);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchEvents());
-  }, [dispatch]);
 
   // Helper to format ISO date
   const formatDate = (isoDate) => {

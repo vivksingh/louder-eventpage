@@ -66,14 +66,10 @@
       return () => clearInterval(interval)
     }, [])
 
-//     useEffect(() => {
-//   console.log("Events updated:", events2);
-// }, [events2]);
 
-
-    useEffect(() => {
-      dispatch(fetchEvents());
-    }, [dispatch])
+    // useEffect(() => {
+    //   dispatch(fetchEvents());
+    // }, [dispatch])
 
     // Animation for SVG letters
     useEffect(() => {
@@ -175,8 +171,7 @@
 
     return (
       <>
-      {loading ? (<FullPageLoader />) : 
-        offline ? (<OfflinePage />) : 
+      
         <div className="pt-12">
           <div>
 
@@ -337,69 +332,78 @@
             <div className="container mx-auto px-4">
               <h2 className="text-4xl font-bold mb-12">UPCOMING EVENTS</h2>
 
-              <div className="relative bg-black border border-white text-white p-8 rounded-lg">
-                <div className="flex justify-between items-center mb-8">
-                  <h3 className="text-2xl font-bold">
-                    {new Date(events[currentEventIndex].start_date).toLocaleDateString("en-GB", {
-                      weekday: "short",
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}
-                  </h3>
-                  <div className="flex space-x-2">
-                    <Button
-                      size="icon"
-                      onClick={prevEvent}
-                      className="rounded-full border-white text-white hover:bg-white hover:text-black"
-                    >
-                      <ChevronLeft className="h-5 w-5" />
-                    </Button>
-                    <Button
-                      size="icon"
-                      onClick={nextEvent}
-                      className="rounded-full border-white text-white hover:bg-white hover:text-black"
-                    >
-                      <ChevronRight className="h-5 w-5" />
-                    </Button>
-                  </div>
+              {events.length === 0 ? (
+                // Show this if there are no events
+                <div className="text-center py-12 text-2xl font-semibold">
+                  No events right now! Stay tuned!
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <img
-                      src={`http://localhost:5000/${events[currentEventIndex].imgsrc}` || "/placeholder.svg"}
-                      alt={events[currentEventIndex].name}
-                      className="max-w-sm h-[300px] aspect-[3/4] object-cover flex justify-center items-center mx-auto mb-6 rounded-lg shadow-lg"
-                    />
+              ) : (
+                // Else show the full slider
+                <div className="relative bg-black border border-white text-white p-8 rounded-lg">
+                  <div className="flex justify-between items-center mb-8">
+                    <h3 className="text-2xl font-bold">
+                      {new Date(events[currentEventIndex].start_date).toLocaleDateString("en-GB", {
+                        weekday: "short",
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      })}
+                    </h3>
+                    <div className="flex space-x-2">
+                      <Button
+                        size="icon"
+                        onClick={prevEvent}
+                        className="rounded-full border-white text-white hover:bg-white hover:text-black"
+                      >
+                        <ChevronLeft className="h-5 w-5" />
+                      </Button>
+                      <Button
+                        size="icon"
+                        onClick={nextEvent}
+                        className="rounded-full border-white text-white hover:bg-white hover:text-black"
+                      >
+                        <ChevronRight className="h-5 w-5" />
+                      </Button>
+                    </div>
                   </div>
 
-                  <div className="flex flex-col justify-between">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                      <h3 className="text-3xl font-bold mb-4">{events[currentEventIndex].name}</h3>
-                      <p className="mb-6">{events[currentEventIndex].description}</p>
+                      <img
+                        src={`http://localhost:5000/${events[currentEventIndex].imgsrc}` || "/placeholder.svg"}
+                        alt={events[currentEventIndex].name}
+                        className="max-w-sm h-[300px] aspect-[3/4] object-cover flex justify-center items-center mx-auto mb-6 rounded-lg shadow-lg"
+                      />
                     </div>
 
-                    <div className="space-y-4">
-                      <a href={events[currentEventIndex].redirection_url} target="_blank" rel="noopener noreferrer">
-                        <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">BUY TICKETS</Button>
-                      </a>
-                      <Link to="/vip-tables">
-                        <Button variant="ghost" className="w-full text-white hover:bg-white hover:text-black">
-                          VIP TABLES
-                        </Button>
-                      </Link>
-                      <a href={events[currentEventIndex].redirection_url} target="_blank" rel="noopener noreferrer">
-                        <Button variant="ghost" className="w-full text-white hover:bg-white hover:text-black">
-                          FIND OUT MORE
-                        </Button>
-                      </a>
+                    <div className="flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-3xl font-bold mb-4">{events[currentEventIndex].name}</h3>
+                        <p className="mb-6">{events[currentEventIndex].description}</p>
+                      </div>
+
+                      <div className="space-y-4">
+                        <a href={events[currentEventIndex].redirection_url} target="_blank" rel="noopener noreferrer">
+                          <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">BUY TICKETS</Button>
+                        </a>
+                        <Link to="/vip-tables">
+                          <Button variant="ghost" className="w-full text-white hover:bg-white hover:text-black">
+                            VIP TABLES
+                          </Button>
+                        </Link>
+                        <a href={events[currentEventIndex].redirection_url} target="_blank" rel="noopener noreferrer">
+                          <Button variant="ghost" className="w-full text-white hover:bg-white hover:text-black">
+                            FIND OUT MORE
+                          </Button>
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           </section>
+
 
 
           {/* Events section */}
@@ -435,21 +439,47 @@
               </div>
               
               {/* Event slider */}
+              {events.length === 0 ? (
+              
+              <div className="text-center py-12 text-2xl font-semibold">
+                No events right now! Stay tuned!
+              </div>
+            ) :
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                 {events.slice(currentAllEventIndex * 4, (currentAllEventIndex + 1) * 4).map((event) => (
-                  <div key={event._id} className="text-center">
+                  <div key={event._id} className="text-center group">
                     <div className="mb-4 aspect-square relative overflow-hidden rounded-lg shadow-lg">
                       <img
                         src={`http://localhost:5000/${event.imgsrc}` || "/placeholder.svg"}
                         alt={event.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
+                      {/* Overlay with buttons */}
+                      <div className="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 space-y-2">
+                        <a href = {`${event.redirection_url}`}>
+                          <Button variant="default" className="w-32">
+                            Buy Now
+                          </Button>
+                        </a>
+
+                        <Link to="/vip-tables">
+                          <Button variant="default" className="w-32">
+                            Book a Table
+                          </Button>
+                        </Link>
+                        
+                        <a href= {`${event.redirection_url}`} >
+                          <Button variant="secondary" className="w-32">
+                            More Info
+                          </Button>
+                        </a>
+                      </div>
                     </div>
                     <h3 className="text-xl font-bold">{event.name}</h3>
                   </div>
                 ))}
               </div>
-
+              }
             </div>
           </section>
 
@@ -589,7 +619,7 @@
 
           <SignupPromo />
         </div>
-      }
+      
       </>
     )
   }
